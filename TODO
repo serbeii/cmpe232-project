@@ -1,0 +1,21 @@
+entities:
+    users
+    albums
+    collection
+    songs
+    artists
+
+admin methods:
+    delete user (delete)
+    create album (insert)
+    create artist 
+    update user (update)
+    update album, artist (update)
+
+user methods:
+    display collection(view, single row)
+    add albums to collection(insert)
+    view artists (join 3(song, album, artist), view multiple row)
+    view collection size (count)
+    view albums (join 2(song, album))
+
