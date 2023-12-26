@@ -5,18 +5,51 @@ entities:
     songs
     artists
 
+users:
+    primary key unique int userid
+    string username
+    string password (sha256)
+    boolean isadmin
+
+artists:
+    primary key unique int artistid
+    string name
+
+albums:
+    primary key unique int albumid
+    date release
+    string genre
+    string title
+    cover(?)
+    foreign key int artistid from artists
+    int total length (sum of songs duration in album)
+
+songs:
+    primary key int songid
+    string title
+    foreign key int artistid from artists
+    foreign key int albumid from albums
+    int durationinseconds
+
+collection:
+    foreign key int userid
+    foreign key int albumid
+    composite key !!!!(?)
+
 admin methods:
     delete user (delete)
     create album (insert)
     create artist 
     update user (update)
     update album, artist (update)
+    sort users(order by count of albums in collection desc)
+    average collection size(avg)
 
 user methods:
     display collection(view, single row)
     add albums to collection(insert)
     view artists (join 3(song, album, artist), view multiple row)
     view collection size (count)
-    view albums (join 2(song, album))
+    view albums (join 2(song, album), max length song, min length song)
 
-cem
+
