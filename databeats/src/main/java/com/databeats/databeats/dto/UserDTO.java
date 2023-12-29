@@ -1,14 +1,14 @@
 package com.databeats.databeats.dto;
 
 public class UserDTO {
-    private long userId = 0;
+    private long userId;
     private String username;
     private String password;
     //add role
     public UserDTO() {}
 
-    public UserDTO(String username, String password) {
-        //this.userId = userId;
+    public UserDTO(long userId, String username, String password) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
     }

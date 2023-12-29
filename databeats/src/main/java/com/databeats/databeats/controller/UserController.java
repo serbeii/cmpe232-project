@@ -16,7 +16,7 @@ import com.databeats.databeats.dto.UserDTO;
 import com.databeats.databeats.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RequestMapping("/home")
 public class UserController {
     
