@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.*;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.Set;
 
@@ -25,34 +26,40 @@ public class User implements UserDetails{
     @Column(nullable = false)
     private String password;
     
-	@ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles; // Corrected to Set<String>
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (roles != null && !roles.isEmpty()) {
-            return roles.stream()
-                    .filter(role -> "USER".equals(role) || "ADMIN".equals(role))
-                    .map(role -> new SimpleGrantedAuthority(role))
-                    .collect(Collectors.toSet());
+        if (role != null) {
+            return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
         } else {
             return Collections.singleton(new SimpleGrantedAuthority("USER"));
         }
     }
 
     public User() {}
-
-    public User(String username, String password) {
-        //this.userId = userId;
+    
+    public User(String username, String password, Roles role) {
         this.username = username;
         this.password = password;
+        this.role = role;
+    }
+
+    public User(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        try {
+            this.role = Enum.valueOf(Roles.class, role);
+        }
+        catch (IllegalArgumentException e) {
+            this.role = Roles.USER;
+        }
     }
 
     public long getUserId() {
 		return userId;
-	}
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 	public String getUsername() {
 		return username;

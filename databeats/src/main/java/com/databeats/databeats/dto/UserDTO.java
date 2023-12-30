@@ -1,10 +1,13 @@
 package com.databeats.databeats.dto;
 
+import com.databeats.databeats.model.Roles;
+
 public class UserDTO {
     private long userId;
     private String username;
     private String password;
-    //add role
+    private Roles role = Roles.USER;
+
     public UserDTO() {}
 
     public UserDTO(long userId, String username, String password) {
@@ -13,12 +16,20 @@ public class UserDTO {
         this.password = password;
     }
 
+    public UserDTO(long userId, String username, String password, Roles role) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+    public UserDTO(long userId, String username, String password, String role) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.role = Enum.valueOf(Roles.class, role);
+    }
 	public long getUserId() {
 		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getUsername() {
@@ -35,5 +46,13 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role.toString();
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
 	}
 }
