@@ -25,12 +25,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String addUser(UserDTO userDTO) {
-        User user =  new User(
-                userDTO.getUsername(),
-                this.passwordEncoder.encode(userDTO.getPassword())
-                );
-        userRepository.save(user);
-        return user.getUsername();
+        userRepository.addUser(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()),
+                    userDTO.getRole());
+        return userDTO.getUsername();
     }
 
     UserDTO userDTO;
