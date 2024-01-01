@@ -27,15 +27,18 @@ public class SecurityConfig {
         UserDetails admin = new User("admin", passwordEncoder().encode("adminpass"), "ADMIN"); 
         return new InMemoryUserDetailsManager(user1, admin);
     }
-    
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((authorize) -> authorize
-				.anyRequest().authenticated()
-			)
-			.httpBasic(Customizer.withDefaults())
-			.formLogin(Customizer.withDefaults());
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasRole("USER")
+                .anyRequest().permitAll()
+            )
+            .formLogin(Customizer.withDefaults())
+            .httpBasic(Customizer.withDefaults());
+        http.csrf(csrfCustomizer -> csrfCustomizer.disable()); //Not the cleanest way to do this, not a safe way either
         return http.build();
     }
 }
