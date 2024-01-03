@@ -1,6 +1,7 @@
 package com.databeats.databeats.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     Optional<User> findByUsernameAndPassword(String username, String password);
 
     @Modifying
+    @Transactional
     @Query(value = "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)", nativeQuery = true)
     void addUser(@Param("username") String username, @Param("password") String password, @Param("role") String role);
 }

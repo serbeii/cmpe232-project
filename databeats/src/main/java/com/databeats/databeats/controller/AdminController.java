@@ -1,9 +1,11 @@
 package com.databeats.databeats.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@CrossOrigin
+@RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
     /*TODO: Implement the following methods:
@@ -11,9 +13,7 @@ public class AdminController {
      * user deletion,
      * user creation,
      * admin creation,
-     * album methods deletion, creation etc.
      * artist addition,
      * username modification,
      * database nuke(drop and exit app)*/
-    
 }

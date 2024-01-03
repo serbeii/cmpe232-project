@@ -7,11 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import com.databeats.databeats.config.LoginMessage;
 import com.databeats.databeats.dto.LoginDTO;
 import com.databeats.databeats.dto.UserDTO;
 import com.databeats.databeats.model.User;
 import com.databeats.databeats.repository.UserRepository;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,8 +30,6 @@ public class UserServiceImpl implements UserService {
                     userDTO.getRole());
         return userDTO.getRole();
     }
-
-    UserDTO userDTO;
 
     @Override
     @Transactional
@@ -54,6 +53,21 @@ public class UserServiceImpl implements UserService {
         }
         else {
             return "Username does not exist";
+        }
+    }
+    
+    @PostConstruct
+    public void generateDefaultAdmin() {
+        try {
+        User admin = userRepository.findByUsername("admin");
+        if (admin == null) {
+            userRepository.addUser("admin", passwordEncoder.encode("adminpass"), "ADMIN");
+            System.out.println("creating default admin");
+        }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error during initialization " + e);
         }
     }
 }

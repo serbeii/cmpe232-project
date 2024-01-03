@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.databeats.databeats.config.LoginMessage;
 import com.databeats.databeats.dto.LoginDTO;
 import com.databeats.databeats.dto.UserDTO;
 import com.databeats.databeats.service.UserService;
