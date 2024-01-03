@@ -28,6 +28,6 @@ tasks.withType<Test> {
 }
 
 tasks.withType(JavaCompile) {
-    options.freeCompilerArgs += "-parameters"
+    options.compilerArgs += "-parameters"
 }
 
