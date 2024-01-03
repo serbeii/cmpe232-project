@@ -25,4 +25,5 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+    options.freeCompilerArgs += "-parameters"
 }
