@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.Customizer;
 
 import com.databeats.databeats.model.User;
 
@@ -32,13 +31,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/user/**").hasRole("USER")
                 .anyRequest().permitAll()
-            )
-            .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults());
-        http.csrf(csrfCustomizer -> csrfCustomizer.disable()); //Not the cleanest way to do this, not a safe way either
+            );
+        http.csrf(csrfCustomizer -> csrfCustomizer.disable()); //Not the cleanest way to do this, not the safest either
         return http.build();
     }
 }

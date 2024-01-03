@@ -58,6 +58,10 @@ public class User implements UserDetails{
         }
     }
 
+    public String getRoles() {
+        return role.toString();
+    }
+
     public long getUserId() {
 		return userId;
 	}

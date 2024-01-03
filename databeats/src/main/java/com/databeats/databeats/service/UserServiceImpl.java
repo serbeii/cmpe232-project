@@ -27,14 +27,14 @@ public class UserServiceImpl implements UserService {
     public String addUser(UserDTO userDTO) {
         userRepository.addUser(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()),
                     userDTO.getRole());
-        return userDTO.getUsername();
+        return userDTO.getRole();
     }
 
     UserDTO userDTO;
 
     @Override
     @Transactional
-    public LoginMessage loginUser(LoginDTO loginDTO) {
+    public String loginUser(LoginDTO loginDTO) {
         User user1 = userRepository.findByUsername(loginDTO.getUsername());
         if (user1 != null) {
             String password = loginDTO.getPassword();
@@ -42,18 +42,18 @@ public class UserServiceImpl implements UserService {
             if (passwordEncoder.matches(password, encodedPassword)) {
                 Optional<User> user = userRepository.findByUsernameAndPassword(loginDTO.getUsername(), encodedPassword);
                 if (user.isPresent()) {
-                    return new LoginMessage("Login Success", true);
+                    return user.map(User::getRoles).orElse(null);
                 }
                 else {
-                    return new LoginMessage("Login Failed", false);
+                    return "Login Failed";
                 }
             }
             else {
-                return new LoginMessage("Password does not match", false);
+                return "Password does not match";
             }
         }
         else {
-            return new LoginMessage("Username does not exist", false);
+            return "Username does not exist";
         }
     }
 }
