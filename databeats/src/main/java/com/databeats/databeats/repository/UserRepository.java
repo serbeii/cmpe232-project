@@ -18,7 +18,7 @@ import com.databeats.databeats.model.User;
 public interface UserRepository extends JpaRepository<User, Long>{
     @Query(value = "SELECT * FROM users WHERE username = :username", nativeQuery = true)
     User findByUsername(String username);
-    
+     
     @Query(value = "SELECT * FROM users WHERE username = :username AND password = :password", nativeQuery = true)
     Optional<User> findByUsernameAndPassword(String username, String password);
 
@@ -26,5 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
     @Transactional
     @Query(value = "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)", nativeQuery = true)
     void addUser(@Param("username") String username, @Param("password") String password, @Param("role") String role);
+
+    @Query(value = "SELECT * FROM users WHERE user_id = :userId", nativeQuery = true)
+    User findById(long userId);
 }
 
