@@ -32,7 +32,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/user/**").hasRole("USER")
+                
                 .anyRequest().permitAll()
             );
         http.csrf(csrfCustomizer -> csrfCustomizer.disable()); //Not the cleanest way to do this, not the safest either
