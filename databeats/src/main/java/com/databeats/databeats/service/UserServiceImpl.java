@@ -8,6 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -18,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import com.databeats.databeats.controller.LoginResponse;
 import com.databeats.databeats.dto.LoginDTO;
 import com.databeats.databeats.dto.UserDTO;
+import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.model.Collection;
 import com.databeats.databeats.model.User;
 import com.databeats.databeats.repository.AlbumRepository;
@@ -47,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ArtistRepository artistRepository;
+    
+    @Autowired
+    private ArtistService artistService;
     
     @Override
     @Transactional
@@ -94,11 +100,15 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     public void generateDefaultAdmin() {
         try {
-        User admin = userRepository.findByUsername("admin");
-        if (admin == null) {
-            userRepository.addUser("admin", passwordEncoder.encode("adminpass"), "ADMIN");
-            System.out.println("creating default admin");
-        }
+            User admin = userRepository.findByUsername("admin");
+            if (admin == null) {
+                userRepository.addUser("admin", passwordEncoder.encode("adminpass"), "ADMIN");
+                System.out.println("creating default admin");
+                artistRepository.addArtist("John Doe");
+                Artist artist = artistService.getArtistByName("John Doe");
+                albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", artist.getArtistId()); 
+                addAlbumtoCollection(1, "Big Music");
+            }
         }
         catch (Exception e)
         {
@@ -136,7 +146,8 @@ public class UserServiceImpl implements UserService {
           }
         } else {
             // Handle the case where artistName is null
-            throw new IllegalArgumentException("Artist name cannot be null");*/
+            throw new IllegalArgumentException("Artist name cannot be null");
+            }*/
         
 
         

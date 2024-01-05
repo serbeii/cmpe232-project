@@ -1,11 +1,13 @@
 package com.databeats.databeats.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.databeats.databeats.dto.UserDTO;
 import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.model.Roles;
+import com.databeats.databeats.model.UserAlbumCollectionView;
+import com.databeats.databeats.repository.UserAlbumCollectionRepository;
 import com.databeats.databeats.service.ArtistService;
 import com.databeats.databeats.service.UserService;
 
@@ -30,6 +34,9 @@ public class AdminController {
 
     @Autowired
     private ArtistService artistService;
+    
+    @Autowired
+    private UserAlbumCollectionRepository userAlbumCollectionRepository;
 
     @PostMapping(path = "/addUser/{userId}")
     public ResponseEntity<?> addUser(@PathVariable long userId, @RequestBody UserDTO userDTO) {
@@ -118,6 +125,11 @@ public class AdminController {
         else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("/view")
+    public List<UserAlbumCollectionView> getUserAlbumCollection() {
+        return userAlbumCollectionRepository.getUserAlbumCollection();
     }
     
 }
