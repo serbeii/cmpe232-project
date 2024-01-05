@@ -7,3 +7,4 @@ import com.databeats.databeats.model.Album;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long>{
 }
+
