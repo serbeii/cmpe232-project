@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.repository.ArtistRepository;
 
@@ -24,4 +25,16 @@ public class ArtistServiceImpl implements ArtistService {
     public boolean removeArtistByName(String artistName) {
         return (artistRepository.removeArtistByName(artistName) > 0);
     }
+    
+    @Override
+    public Artist getArtistByName(String artistName) {
+        List<Artist> artists = artistRepository.getArtistByName(artistName);
+    
+        if (!artists.isEmpty()) {
+            return artists.get(0);
+        } else {
+            System.out.println("artist not found " + artistName);
+            return null;
+        }
+    }   
 }

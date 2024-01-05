@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.model.Album;
 import com.databeats.databeats.service.AlbumService;
 
@@ -20,8 +21,8 @@ public class AlbumController {
     private AlbumService albumService;
 
     @PostMapping("/add")
-    public String add(@RequestBody Album album) {
-        albumService.saveAlbum(album);
+    public String add(@RequestBody AlbumDTO albumDTO) {
+        albumService.saveAlbum(albumDTO);
         return "New album is added.";
     }
 

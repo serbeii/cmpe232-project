@@ -1,7 +1,7 @@
 package com.databeats.databeats.service;
 
-import com.databeats.databeats.model.Album;
+import com.databeats.databeats.dto.AlbumDTO;
 
 public interface AlbumService {
-    public Album saveAlbum(Album album);
+    public void saveAlbum(AlbumDTO albumDTO);
 }

@@ -10,4 +10,6 @@ public interface ArtistService {
 
     @Transactional
     public boolean removeArtistByName(String name);
+
+    public Artist getArtistByName(String name);
 }

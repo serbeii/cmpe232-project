@@ -2,6 +2,7 @@ package com.databeats.databeats.model;
 
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,10 +19,11 @@ public class Album {
     private Date releaseDate;
     private String genre;
     
-    @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)    @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    public Album () {
+    }
 	public long getAlbumId() {
 		return albumId;
 	}

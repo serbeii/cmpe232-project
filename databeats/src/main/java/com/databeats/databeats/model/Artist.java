@@ -19,6 +19,9 @@ public class Artist {
         this.artistName = artistName;
     }
 
+    public Artist() {
+    }
+
 	public long getArtistId() {
 		return artistId;
 	}
