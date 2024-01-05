@@ -16,7 +16,6 @@ public interface UserService {
    void deleteAlbumFromCollection(long userId, String albumTitle);
    void deleteEntireCollection(Optional<Long> userId);
    // List<Collection> viewArtistDiscographyInCollection(String artistName);
-   ResponseEntity<?> loginUser(LoginDTO loginDTO);
    String getRoleById(long userId);
    boolean removeUser(String username);
    boolean updateUsername(String oldUsername, String newUsername);

@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
         } else {
             // Handle the case where artistName is null
             throw new IllegalArgumentException("Artist name cannot be null");*/
-        }
+        
 
         
 
