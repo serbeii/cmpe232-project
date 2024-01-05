@@ -11,11 +11,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.databeats.databeats.model.Artist;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 @EnableJpaRepositories
 public interface ArtistRepository extends JpaRepository<Artist, Long>{
 
+    @Query(value = "SELECT artist_id FROM artist WHERE artist_name = :artistName", nativeQuery =true)
+    Long findArtistIdByArtistName(@Param("artistName") String artistName);
+  
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO artist (artist_name) VALUES (:artistName)", nativeQuery = true) 
