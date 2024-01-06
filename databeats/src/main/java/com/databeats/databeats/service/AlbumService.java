@@ -12,5 +12,6 @@ public interface AlbumService {
     String updateAlbumTitle(String oldTitle, String newTitle);
     List<Album> getAlbumInfo(long albumID);
     Long deleteAlbum(long album_id);
-    
+    public void saveAlbum(AlbumDTO albumDTO);
+
 }
