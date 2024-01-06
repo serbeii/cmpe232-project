@@ -1,7 +1,9 @@
 package com.databeats.databeats.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,13 +17,15 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long albumId;
     private String albumTitle;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private String genre;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)    
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
+    public Album () {
+    }
 	public long getAlbumId() {
 		return albumId;
 	}
@@ -38,11 +42,11 @@ public class Album {
 		this.albumTitle = albumTitle;
 	}
 
-	public Date getReleaseDate() {
+	public LocalDate getReleaseDate() {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 

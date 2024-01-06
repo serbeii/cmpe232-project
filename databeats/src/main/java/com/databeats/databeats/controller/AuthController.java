@@ -1,8 +1,7 @@
 package com.databeats.databeats.controller;
 
-import static org.springframework.http.ResponseEntity.ok;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,18 +22,19 @@ public class AuthController {
     private UserService userService;
     
     @PostMapping(path = "/register")
-    public String saveUser(@RequestBody UserDTO userDTO)
+    public ResponseEntity<LoginResponse> saveUser(@RequestBody UserDTO userDTO)
     {   
-        System.out.println("register request");
         String role = userService.addUser(userDTO);
-        return role;
+        long id = userDTO.getUserId();
+        
+        LoginResponse loginState = new LoginResponse(role, id);
+
+        return new ResponseEntity<>(loginState, HttpStatus.OK);
     }
 
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO)
     {
-        System.out.println("login request");
-        String loginMessage = userService.loginUser(loginDTO);
-        return ok(loginMessage);
+        return userService.loginUser(loginDTO);
     }
 }
