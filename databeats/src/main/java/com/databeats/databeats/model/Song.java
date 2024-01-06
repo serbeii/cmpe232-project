@@ -1,5 +1,6 @@
 package com.databeats.databeats.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class Song {
     private Artist artist;
 
     @OneToOne
+	//(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "album_id")
     private Album album;
 
