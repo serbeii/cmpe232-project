@@ -4,17 +4,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.databeats.databeats.dto.AlbumDTO;
+import com.databeats.databeats.dto.SongDTO;
 import com.databeats.databeats.model.Album;
 import com.databeats.databeats.service.AlbumService;
+import com.databeats.databeats.service.SongService;
 
     /* TODO: Implement the necesseary methods:
      * create album by inserting as many songs as necesseary, create the songs during this
@@ -26,8 +29,12 @@ import com.databeats.databeats.service.AlbumService;
 @CrossOrigin
 @RequestMapping("/api/v1/album")
 public class AlbumController {
+    
     @Autowired
     private AlbumService albumService;
+
+    @Autowired
+    private SongService songService;
     
     @GetMapping("/getAlbumTitle")//it works
     public String updateAlbumTitle (@RequestBody Map<String, String > oldTitle) {
@@ -53,15 +60,37 @@ public class AlbumController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestBody AlbumDTO albumDTO) {
+    public ResponseEntity<?> add(@RequestBody AlbumBody albumBody) {
+        if (albumBody == null || albumBody.albumDTO == null || albumBody.songDTO == null) {
+            return ResponseEntity.badRequest().body("Invalid request payload");
+        }
+        AlbumDTO albumDTO = albumBody.albumDTO;
+        List<SongDTO> songDTO = albumBody.songDTO; 
         albumService.saveAlbum(albumDTO);
-        return "New album is added.";
+        songService.addSongs(songDTO, albumDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-}
- 
-   
+    
+    static class AlbumBody {
+        AlbumBody() {
+        }
 
+        AlbumDTO albumDTO;
+        List<SongDTO> songDTO;
 
+		public AlbumDTO getAlbumDTO() {
+			return albumDTO;
+		}
+		public void setAlbumDTO(AlbumDTO albumDTO) {
+			this.albumDTO = albumDTO;
+		}
+		public List<SongDTO> getSongDTO() {
+			return songDTO;
+		}
+		public void setSongDTO(List<SongDTO> songDTO) {
+			this.songDTO = songDTO;
+		}
+        
 
-
-   
+    }
+} 
