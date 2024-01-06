@@ -29,7 +29,7 @@ public class AlbumController {
     @Autowired
     private AlbumService albumService;
     
-    @GetMapping("/getAlbumTitle")
+    @GetMapping("/getAlbumTitle")//it works
     public String updateAlbumTitle (@RequestBody Map<String, String > oldTitle) {
         String oldtitle = oldTitle.get("oldTitle");
         String newtitle = oldTitle.get("newTitle");
@@ -37,7 +37,7 @@ public class AlbumController {
         return "Updated succesfully! Your new title is "+ newtitle;
     }
     
-    @GetMapping("/getAlbumInfo")
+    @GetMapping("/getAlbumInfo")//postman 200 
     public List<Album> getAlbumInfo(@RequestBody Map<String,String> albumID) {
         Long albumid= Long.parseLong(albumID.get("albumID"));
         return albumService.getAlbumInfo(albumid);
@@ -45,7 +45,7 @@ public class AlbumController {
         
     }
     
-    @PostMapping("/deleteAlbum")
+    @PostMapping("/deleteAlbum")//when I want to delete something it deletes except one spesific information when ı tried to delete ı got error 500
     public void deleteAlbum (@RequestBody Map<String,String> albumI) {
         Long al_ID= Long.parseLong(albumI.get("album_id"));
        System.out.println(albumService.deleteAlbum(al_ID)+"Album deleted"); 
