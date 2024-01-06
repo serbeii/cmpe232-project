@@ -1,25 +1,27 @@
 package com.databeats.databeats.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.*;
-
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.security.core.Authentication;
 
 import com.databeats.databeats.controller.LoginResponse;
+import com.databeats.databeats.dto.CollectionDTO;
 import com.databeats.databeats.dto.LoginDTO;
 import com.databeats.databeats.dto.UserDTO;
+import com.databeats.databeats.model.Album;
 import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.model.Collection;
 import com.databeats.databeats.model.User;
@@ -29,7 +31,6 @@ import com.databeats.databeats.repository.CollectionRepository;
 import com.databeats.databeats.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -149,10 +150,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Artist name cannot be null");
             }*/
         
-
-        
-
-
     @Override
     public String getRoleById(long userId) {
         return userRepository.findById(userId).getRoles();
@@ -166,5 +163,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUsername(String oldUsername, String newUsername) {
         return (userRepository.updateUsername(oldUsername, newUsername) > 0);
+    }
+
+    @Override
+    public List<CollectionDTO> getCollection(long user_id) {
+        List<Collection> collection = collectionRepository.getUserCollection(user_id);
+        List <CollectionDTO> userCollection = new ArrayList<>();
+        for (Collection coll : collection) {
+            Album album = coll.getAlbum();
+            Artist artist = album.getArtist(); 
+            CollectionDTO e = new CollectionDTO(album, artist);
+            userCollection.add(e);
+        }
+        return userCollection; 
     }
 }

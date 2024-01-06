@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,9 @@ import com.databeats.databeats.model.UserAlbumCollectionView;
 import com.databeats.databeats.repository.UserAlbumCollectionRepository;
 import com.databeats.databeats.service.ArtistService;
 import com.databeats.databeats.service.UserService;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @RestController
 @CrossOrigin
@@ -37,6 +42,9 @@ public class AdminController {
     
     @Autowired
     private UserAlbumCollectionRepository userAlbumCollectionRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @PostMapping(path = "/addUser/{userId}")
     public ResponseEntity<?> addUser(@PathVariable long userId, @RequestBody UserDTO userDTO) {
@@ -130,6 +138,20 @@ public class AdminController {
     @GetMapping("/view")
     public List<UserAlbumCollectionView> getUserAlbumCollection() {
         return userAlbumCollectionRepository.getUserAlbumCollection();
+    }
+
+    @DeleteMapping("/resetDatabase/{userId}")
+    @Transactional
+    public ResponseEntity<?> resetDatabase(@PathVariable long userId) {
+        String role = userService.getRoleById(userId);
+        if (role.equals("ADMIN")) {
+            entityManager.createNativeQuery("DROP DATABASE cmpe232").executeUpdate();
+            System.exit(0);
+            return new ResponseEntity<>("Database Dropped", HttpStatus.OK);
+        } 
+        else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
+        }
     }
     
 }

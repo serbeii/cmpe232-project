@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.databeats.databeats.model.Collection;
+
 import java.util.*;
 
 
@@ -31,4 +32,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long>{
     /*@Query(value = "SELECT * FROM collection WHERE album_id = :albumId", nativeQuery = true)
     List<Collection> viewArtistDiscographyInCollection(@Param("albumId") long userId);*/
 
+    @Query(value = "SELECT * FROM collection WHERE user_id = :user_id", nativeQuery = true)
+    List<Collection> getUserCollection(@Param("user_id") long user_id);
 }
