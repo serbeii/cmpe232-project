@@ -1,5 +1,7 @@
 package com.databeats.databeats.dto;
 
+import com.databeats.databeats.model.Song;
+
 public class SongDTO {
 
     private String song_title;
@@ -16,6 +18,11 @@ public class SongDTO {
     public SongDTO(String song_title, String duration) {
         this.song_title = song_title;
         this.duration = Integer.parseInt(duration);
+    }
+
+    public SongDTO(Song song) {
+        this.song_title = song.getSongTitle();
+        this.duration = song.getDuration();
     }
 
 	public String getSong_title() {

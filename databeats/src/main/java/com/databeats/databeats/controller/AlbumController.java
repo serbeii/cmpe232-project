@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.databeats.databeats.dto.AlbumBody;
 import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.dto.SongDTO;
 import com.databeats.databeats.model.Album;
@@ -20,7 +22,6 @@ import com.databeats.databeats.service.AlbumService;
 import com.databeats.databeats.service.SongService;
 
     /* TODO: Implement the necesseary methods:
-     * create album by inserting as many songs as necesseary, create the songs during this
      * delete an album, delete all connected songs as well
      * update an album, its title, songs, song details, delete song if necesseary
      * view an album, get its tracklist, artist, total duration, count of songs*/
@@ -36,7 +37,7 @@ public class AlbumController {
     @Autowired
     private SongService songService;
     
-    @GetMapping("/getAlbumTitle")//it works
+    @GetMapping("/getAlbumTitle")
     public String updateAlbumTitle (@RequestBody Map<String, String > oldTitle) {
         String oldtitle = oldTitle.get("oldTitle");
         String newtitle = oldTitle.get("newTitle");
@@ -44,7 +45,7 @@ public class AlbumController {
         return "Updated succesfully! Your new title is "+ newtitle;
     }
     
-    @GetMapping("/getAlbumInfo")//postman 200 
+    @GetMapping("/getAlbumInfo") 
     public List<Album> getAlbumInfo(@RequestBody Map<String,String> albumID) {
         Long albumid= Long.parseLong(albumID.get("albumID"));
         return albumService.getAlbumInfo(albumid);
@@ -55,42 +56,29 @@ public class AlbumController {
     @PostMapping("/deleteAlbum")//when I want to delete something it deletes except one spesific information when ı tried to delete ı got error 500
     public void deleteAlbum (@RequestBody Map<String,String> albumI) {
         Long al_ID= Long.parseLong(albumI.get("album_id"));
-       System.out.println(albumService.deleteAlbum(al_ID)+"Album deleted"); 
+        System.out.println(albumService.deleteAlbum(al_ID)+"Album deleted"); 
      
+    }
+
+    @GetMapping("/searchAlbum/{substring}")
+    public List<AlbumDTO> searchAlbum(@PathVariable String substring) { 
+        return albumService.searchAlbum(substring);
+    }
+
+    @GetMapping("/viewAlbum/{album_name}")
+    public AlbumBody viewAlbum(@PathVariable String album_name) {
+        return albumService.viewAlbum(album_name);
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody AlbumBody albumBody) {
-        if (albumBody == null || albumBody.albumDTO == null || albumBody.songDTO == null) {
+        if (albumBody == null || albumBody.getAlbumDTO() == null || albumBody.getSongDTO() == null) {
             return ResponseEntity.badRequest().body("Invalid request payload");
         }
-        AlbumDTO albumDTO = albumBody.albumDTO;
-        List<SongDTO> songDTO = albumBody.songDTO; 
+        AlbumDTO albumDTO = albumBody.getAlbumDTO();
+        List<SongDTO> songDTO = albumBody.getSongDTO(); 
         albumService.saveAlbum(albumDTO);
         songService.addSongs(songDTO, albumDTO);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-    
-    static class AlbumBody {
-        AlbumBody() {
-        }
-
-        AlbumDTO albumDTO;
-        List<SongDTO> songDTO;
-
-		public AlbumDTO getAlbumDTO() {
-			return albumDTO;
-		}
-		public void setAlbumDTO(AlbumDTO albumDTO) {
-			this.albumDTO = albumDTO;
-		}
-		public List<SongDTO> getSongDTO() {
-			return songDTO;
-		}
-		public void setSongDTO(List<SongDTO> songDTO) {
-			this.songDTO = songDTO;
-		}
-        
-
     }
 } 

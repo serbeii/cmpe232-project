@@ -15,20 +15,19 @@ import com.databeats.databeats.model.Song;
 public interface SongRepository extends JpaRepository<Song, Long>{
    
     @Modifying
-    @Query(value="DELETE FROM song WHERE song_id = : song_id", nativeQuery=true)
+    @Query(value="DELETE FROM song WHERE song_id = :song_id", nativeQuery=true)
     public void findByDeletedSongId (@Param("song_id") Long song_id) ;
    
     @Modifying
-    @Query(value="UPDATE song SET song_title = : song_Title WHERE song_id= : song_Id", nativeQuery= true)
+    @Query(value="UPDATE song SET song_title = :song_Title WHERE song_id= :song_Id", nativeQuery= true)
     public List<Song> getUpdatedSongTitle(@Param("song_Title") String song_Title);
   
-    @Query(value="SELECT * FROM song NATURAL JOIN album WHERE song_id= : song_Id", nativeQuery= true)
+    @Query(value="SELECT * FROM song NATURAL JOIN album WHERE song_id= :song_Id", nativeQuery= true)
     public List<Song>  getSongInfo(@Param("song_Id") Long song_Id);
+
+    @Query(value = "SELECT * FROM song WHERE album_id = :album_id", nativeQuery = true)
+    public List<Song> getSongsFromAlbum(@Param("album_id") long album_id);
    
-    @Query(value= "SELECT count(song_id) as 'Number of Songs' , SUM(duration) as 'Album duration', song_Id FROM song GROUP BY song_id"+
-    " ORDER BY song_id ASC",nativeQuery = true )
-    public List<Song> findBySongIndex(@Param("song_Id") Long song_Id);
-    
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO song(song_index, song_title, duration, album_id, artist_id)  VALUES " +

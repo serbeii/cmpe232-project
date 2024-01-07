@@ -1,10 +1,9 @@
 package com.databeats.databeats.repository;
 
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.databeats.databeats.model.Album;
-import com.databeats.databeats.model.Song;
-import com.databeats.databeats.model.Artist;
 
 
 @Repository
@@ -31,6 +28,9 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
     @Query(value="SELECT album.album_title,album.album_id,album.artist_id,album.genre,album.release_date "+
     "FROM album JOIN artist ON album.artist_id =artist.artist_id WHERE album.album_id= :albumID", nativeQuery=true )
     public List<Album>  getAlbumInfo(@Param("albumID") Long albumID);
+
+    @Query(value = "SELECT * FROM album WHERE album_id = :album_id", nativeQuery = true)
+    public List<Album> getAlbum(@Param("album_id") long album_id);
     
     @Modifying
     //Cannot delete or update a parent row: a foreign key constraint fails (`cmpe232`.`song`, 
@@ -51,4 +51,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
                    @Param("releaseDate") LocalDate releaseDate,
                    @Param("genre") String genre,
                    @Param("artist_id") Long artist_id);
+
+    @Query(value = "SELECT * FROM album WHERE album_title LIKE %:substring% AND album_id > 1 ORDER BY album_title ASC", nativeQuery = true)
+    List<Album> searchAlbum(@Param("substring") String substring);
 }
