@@ -24,18 +24,17 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user1 = new User("user1", passwordEncoder().encode("pass1"), "USER");
-        UserDetails admin = new User("admin", passwordEncoder().encode("adminpass"), "ADMIN"); 
+        UserDetails admin = new User("admin", passwordEncoder().encode("adminpass"), "ADMIN");
         return new InMemoryUserDetailsManager(user1, admin);
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll()
-            )
-            .csrf(csrfCustomizer -> csrfCustomizer.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll())
+                .csrf(csrfCustomizer -> csrfCustomizer.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
         return http.build();
     }
 }

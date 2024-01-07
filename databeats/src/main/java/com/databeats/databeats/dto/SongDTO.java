@@ -25,17 +25,20 @@ public class SongDTO {
         this.duration = song.getDuration();
     }
 
-	public String getSong_title() {
-		return song_title;
-	}
-	public void setSong_title(String song_title) {
-		this.song_title = song_title;
-	}
-	public int getDuration() {
-		return duration;
-	}
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
+    public String getSong_title() {
+        return song_title;
+    }
+
+    public void setSong_title(String song_title) {
+        this.song_title = song_title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
 }

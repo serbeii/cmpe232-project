@@ -30,8 +30,6 @@ public class ArtistController {
 
     @GetMapping("/getArtistNameByAlbum/{albumName}")
     public String getArtistNameByAlbum(@PathVariable String albumName) {
-        System.out.println("777777777777777777777" + albumName);
-        System.out.println("77777777777777777777777777 artist name :" + artistService.getArtistNameByAlbum(albumName));
         return artistService.getArtistNameByAlbum(albumName);
     }
 }

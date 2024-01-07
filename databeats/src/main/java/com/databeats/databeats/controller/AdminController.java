@@ -31,15 +31,13 @@ import jakarta.persistence.PersistenceContext;
 @CrossOrigin
 @RequestMapping("/api/v1/admin")
 public class AdminController {
-    /*TODO: Implement the following methods:
-     * advanced user search,
-     * database nuke(drop and exit app)*/
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private ArtistService artistService;
-    
+
     @Autowired
     private UserAlbumCollectionRepository userAlbumCollectionRepository;
 
@@ -52,12 +50,11 @@ public class AdminController {
         if (role.equals("ADMIN")) {
             userService.addUser(userDTO);
             return new ResponseEntity<>(HttpStatus.OK);
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
-    
+
     @PostMapping(path = "/addAdmin/{userId}")
     public ResponseEntity<?> addAdmin(@PathVariable long userId, @RequestBody UserDTO userDTO) {
         String role = userService.getRoleById(userId);
@@ -65,8 +62,7 @@ public class AdminController {
             userDTO.setRole(Roles.ADMIN);
             userService.addUser(userDTO);
             return new ResponseEntity<>(HttpStatus.OK);
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
@@ -78,8 +74,7 @@ public class AdminController {
             Artist artist = new Artist(artistName);
             artistService.addArtist(artist);
             return new ResponseEntity<>(HttpStatus.OK);
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
@@ -90,28 +85,24 @@ public class AdminController {
         if (role.equals("ADMIN")) {
             if (artistService.removeArtistByName(artistName)) {
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
-    
+
     @PostMapping(path = "/removeUser/{userId}")
     public ResponseEntity<?> addUser(@PathVariable long userId, @RequestBody String username) {
         String role = userService.getRoleById(userId);
         if (role.equals("ADMIN")) {
             if (userService.removeUser(username)) {
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
@@ -123,14 +114,12 @@ public class AdminController {
 
         String role = userService.getRoleById(userId);
         if (role.equals("ADMIN")) {
-            if(userService.updateUsername(oldUsername, newUsername)) {
+            if (userService.updateUsername(oldUsername, newUsername)) {
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
@@ -148,10 +137,9 @@ public class AdminController {
             entityManager.createNativeQuery("DROP DATABASE cmpe232").executeUpdate();
             System.exit(0);
             return new ResponseEntity<>("Database Dropped", HttpStatus.OK);
-        } 
-        else {
+        } else {
             return new ResponseEntity<>("Unauthorized", HttpStatus.FORBIDDEN);
         }
     }
-    
+
 }

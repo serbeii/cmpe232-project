@@ -17,24 +17,22 @@ import com.databeats.databeats.service.UserService;
 @CrossOrigin
 @RequestMapping("/api/v1")
 public class AuthController {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @PostMapping(path = "/register")
-    public ResponseEntity<LoginResponse> saveUser(@RequestBody UserDTO userDTO)
-    {   
+    public ResponseEntity<LoginResponse> saveUser(@RequestBody UserDTO userDTO) {
         String role = userService.addUser(userDTO);
         long id = userDTO.getUserId();
-        
+
         LoginResponse loginState = new LoginResponse(role, id);
 
         return new ResponseEntity<>(loginState, HttpStatus.OK);
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO)
-    {
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
         return userService.loginUser(loginDTO);
     }
 }

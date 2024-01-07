@@ -21,45 +21,46 @@ import com.databeats.databeats.model.Album;
 import com.databeats.databeats.service.AlbumService;
 import com.databeats.databeats.service.SongService;
 
-    /* TODO: Implement the necesseary methods:
-     * delete an album, delete all connected songs as well
-     * update an album, its title, songs, song details, delete song if necesseary
-     * view an album, get its tracklist, artist, total duration, count of songs*/
+/* TODO: Implement the necesseary methods:
+ * delete an album, delete all connected songs as well
+ * update an album, its title, songs, song details, delete song if necesseary
+ * view an album, get its tracklist, artist, total duration, count of songs*/
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1/album")
 public class AlbumController {
-    
+
     @Autowired
     private AlbumService albumService;
 
     @Autowired
     private SongService songService;
-    
+
     @GetMapping("/getAlbumTitle")
-    public String updateAlbumTitle (@RequestBody Map<String, String > oldTitle) {
+    public String updateAlbumTitle(@RequestBody Map<String, String> oldTitle) {
         String oldtitle = oldTitle.get("oldTitle");
         String newtitle = oldTitle.get("newTitle");
-       albumService.updateAlbumTitle(oldtitle, newtitle);
-        return "Updated succesfully! Your new title is "+ newtitle;
+        albumService.updateAlbumTitle(oldtitle, newtitle);
+        return "Updated succesfully! Your new title is " + newtitle;
     }
-    
-    @GetMapping("/getAlbumInfo") 
-    public List<Album> getAlbumInfo(@RequestBody Map<String,String> albumID) {
-        Long albumid= Long.parseLong(albumID.get("albumID"));
+
+    @GetMapping("/getAlbumInfo")
+    public List<Album> getAlbumInfo(@RequestBody Map<String, String> albumID) {
+        Long albumid = Long.parseLong(albumID.get("albumID"));
         return albumService.getAlbumInfo(albumid);
     }
-    
-    @PostMapping("/deleteAlbum")//when I want to delete something it deletes except one spesific information when ı tried to delete ı got error 500
-    public void deleteAlbum (@RequestBody Map<String,String> albumI) {
-        Long al_ID= Long.parseLong(albumI.get("album_id"));
-        System.out.println(albumService.deleteAlbum(al_ID)+"Album deleted"); 
-     
+
+    @PostMapping("/deleteAlbum") // when I want to delete something it deletes except one spesific information
+                                 // when ı tried to delete ı got error 500
+    public void deleteAlbum(@RequestBody Map<String, String> albumI) {
+        Long al_ID = Long.parseLong(albumI.get("album_id"));
+        System.out.println(albumService.deleteAlbum(al_ID) + "Album deleted");
+
     }
 
     @GetMapping("/searchAlbum/{substring}")
-    public List<AlbumDTO> searchAlbum(@PathVariable String substring) { 
+    public List<AlbumDTO> searchAlbum(@PathVariable String substring) {
         return albumService.searchAlbum(substring);
     }
 
@@ -74,9 +75,9 @@ public class AlbumController {
             return ResponseEntity.badRequest().body("Invalid request payload");
         }
         AlbumDTO albumDTO = albumBody.getAlbumDTO();
-        List<SongDTO> songDTO = albumBody.getSongDTO(); 
+        List<SongDTO> songDTO = albumBody.getSongDTO();
         albumService.saveAlbum(albumDTO);
         songService.addSongs(songDTO, albumDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-} 
+}

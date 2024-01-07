@@ -12,7 +12,7 @@ public class AlbumDTO {
     private String artistName;
     private int duration;
     private int totalTracks;
-    
+
     public AlbumDTO() {
     }
 
@@ -53,43 +53,52 @@ public class AlbumDTO {
         this.totalTracks = totalTracks;
     }
 
-	public int getTotalTracks() {
-		return totalTracks;
-	}
+    public int getTotalTracks() {
+        return totalTracks;
+    }
 
-	public void setTotalTracks(int totalTracks) {
-		this.totalTracks = totalTracks;
-	}
+    public void setTotalTracks(int totalTracks) {
+        this.totalTracks = totalTracks;
+    }
 
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public LocalDate getReleaseDate() {
-		return releaseDate;
-	}
-	public void setReleaseDate(LocalDate releaseDate) {
-		this.releaseDate = releaseDate;
-	}
-	public int getDuration() {
-		return duration;
-	}
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-	public String getGenre() {
-		return genre;
-	}
-	public void setGenre(String genre) {
-		this.genre = genre;
-	}
-	public String getArtistName() {
-		return artistName;
-	}
-	public void setArtistName(String artistName) {
-		this.artistName = artistName;
-	}
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
 
 }

@@ -14,15 +14,15 @@ import com.databeats.databeats.model.Artist;
 
 @Repository
 @EnableJpaRepositories
-public interface ArtistRepository extends JpaRepository<Artist, Long>{
+public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
-    @Query(value = "SELECT artist_id FROM artist WHERE artist_name = :artistName", nativeQuery =true)
+    @Query(value = "SELECT artist_id FROM artist WHERE artist_name = :artistName", nativeQuery = true)
     Long findArtistIdByArtistName(@Param("artistName") String artistName);
-  
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO artist (artist_name) VALUES (:artistName)", nativeQuery = true)
-    public int addArtist(@Param("artistName") String artistName); 
+    public int addArtist(@Param("artistName") String artistName);
 
     @Modifying
     @Transactional

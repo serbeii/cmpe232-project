@@ -9,20 +9,17 @@ import com.databeats.databeats.model.Collection;
 
 import java.util.*;
 
-
 import jakarta.transaction.Transactional;
-    
+
 @Repository
-public interface CollectionRepository extends JpaRepository<Collection, Long>{
+public interface CollectionRepository extends JpaRepository<Collection, Long> {
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO collection (user_id, album_id) " +
             "SELECT :userId, :albumId " +
-            "FROM (SELECT 1) AS dummy " +  // Subquery in the FROM clause
-            "WHERE NOT EXISTS (SELECT 1 FROM collection WHERE user_id = :userId AND album_id = :albumId)",
-            nativeQuery = true)
+            "FROM (SELECT 1) AS dummy " + // Subquery in the FROM clause
+            "WHERE NOT EXISTS (SELECT 1 FROM collection WHERE user_id = :userId AND album_id = :albumId)", nativeQuery = true)
     void addAlbumtoCollection(@Param("userId") long userId, @Param("albumId") long albumId);
-
 
     @Modifying
     @Transactional

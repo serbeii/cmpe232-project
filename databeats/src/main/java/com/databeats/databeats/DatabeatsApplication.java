@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @EntityScan(basePackages = "com.databeats.databeats.model")
 public class DatabeatsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DatabeatsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DatabeatsApplication.class, args);
+    }
 
 }

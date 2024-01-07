@@ -8,7 +8,8 @@ public class UserDTO {
     private String password;
     private Roles role = Roles.USER;
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(long userId, String username, String password) {
         this.userId = userId;
@@ -22,37 +23,39 @@ public class UserDTO {
         this.password = password;
         this.role = role;
     }
+
     public UserDTO(long userId, String username, String password, String role) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.role = Enum.valueOf(Roles.class, role);
     }
-	public long getUserId() {
-		return userId;
-	}
 
-	public String getUsername() {
-		return username;
-	}
+    public long getUserId() {
+        return userId;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getRole() {
-		return role.toString();
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setRole(Roles role) {
-		this.role = role;
-	}
+    public String getRole() {
+        return role.toString();
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
 }
