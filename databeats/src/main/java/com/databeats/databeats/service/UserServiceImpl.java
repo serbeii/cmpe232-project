@@ -54,9 +54,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ArtistRepository artistRepository;
 
-    @Autowired
-    private ArtistService artistService;
-
     @Override
     @Transactional
     public String addUser(UserDTO userDTO) {
@@ -107,8 +104,8 @@ public class UserServiceImpl implements UserService {
                 userRepository.addUser("admin", passwordEncoder.encode("adminpass"), "ADMIN");
                 System.out.println("creating default admin");
                 artistRepository.addArtist("John Doe");
-                Artist artist = artistService.getArtistByName("John Doe");
-                albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", artist.getArtistId());
+                artistRepository.addArtist("John Doe");
+                albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", (long) 1);
                 addAlbumtoCollection(1, "Big Music");
             }
         } catch (Exception e) {
@@ -118,13 +115,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addAlbumtoCollection(long userId, String albumTitle) {
-        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
+        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle).get(0);
         collectionRepository.addAlbumtoCollection(userId, albumId);
     }
 
     @Override
     public void deleteAlbumFromCollection(long userId, String albumTitle) {
-        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
+        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle).get(0);
         collectionRepository.deleteAlbumFromCollection(userId, albumId);
     }
 
@@ -173,6 +170,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean removeUser(String username) {
+        Long userId = userRepository.findByUsername(username).getUserId();
+        collectionRepository.deleteEntireCollection(Optional.ofNullable(userId));
         return (userRepository.removeUser(username) > 0);
     }
 

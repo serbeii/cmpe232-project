@@ -28,7 +28,7 @@ public class SongServiceImp implements SongService {
     @Transactional
     public void addSongs(List<SongDTO> songDTO, AlbumDTO albumDTO) {
         long artist_id = artistRepository.findArtistIdByArtistName(albumDTO.getArtistName());
-        long album_id = albumRepository.findAlbumIdByAlbumName(albumDTO.getTitle());
+        long album_id = albumRepository.findAlbumIdByAlbumName(albumDTO.getTitle()).get(0);
         for (int i = 1; i <= songDTO.size(); i++) {
             SongDTO songDTO2 = songDTO.get(i - 1);
             songRepository.addSong(i, songDTO2.getSong_title(), songDTO2.getDuration(),

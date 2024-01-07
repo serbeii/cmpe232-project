@@ -33,10 +33,10 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     public void deleteAlbum(@Param("album_id") Long album_id);
 
     @Query(value = "SELECT * FROM album WHERE artist_id = :artistId ", nativeQuery = true)
-    Album findAlbumByArtistId(@Param("artistId") long artistId);
+    List<Album> findAlbumByArtistId(@Param("artistId") long artistId);
 
     @Query(value = "SELECT album_id FROM album WHERE album_title = :albumTitle ", nativeQuery = true)
-    long findAlbumIdByAlbumName(@Param("albumTitle") String albumTitle);
+    List<Long> findAlbumIdByAlbumName(@Param("albumTitle") String albumTitle);
 
     @Modifying
     @Transactional

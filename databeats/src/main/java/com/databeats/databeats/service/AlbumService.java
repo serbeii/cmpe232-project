@@ -16,4 +16,5 @@ public interface AlbumService {
     public void saveAlbum(AlbumDTO albumDTO);
     List<AlbumDTO> searchAlbum(String substring);
     AlbumBody viewAlbum(String album_name); 
+    List<Album> getAlbums();
 }

@@ -40,4 +40,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Transactional
     @Query(value = "DELETE FROM song WHERE album_id = :albumId OR  :albumId IS NULL", nativeQuery = true)
     void deleteSongByAlbum(@Param("albumId") long albumId);
+
+    @Query(value = "SELECT SUM(duration) FROM song WHERE album_id = :albumId", nativeQuery = true)
+    Integer getDuration(@Param("albumId") Long albumId);
 }

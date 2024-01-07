@@ -77,4 +77,9 @@ public class AlbumController {
         songService.addSongs(songDTO, albumDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/getAlbums")
+    public List<Album> getAlbums() {
+        return albumService.getAlbums();
+    }
 }

@@ -33,9 +33,6 @@ public class AlbumServiceImp implements AlbumService {
     SongRepository songRepository;
 
     @Autowired
-    ArtistService artistService;
-
-    @Autowired
     CollectionRepository collectionRepository; 
 
     @Override
@@ -54,7 +51,7 @@ public class AlbumServiceImp implements AlbumService {
     @Override
     @Transactional
     public void deleteAlbum(String albumName) {
-        long album_id = albumRepository.findAlbumIdByAlbumName(albumName);
+        long album_id = albumRepository.findAlbumIdByAlbumName(albumName).get(0);
         songRepository.deleteSongByAlbum(album_id);
         collectionRepository.deleteCollectionByAlbum(album_id);
         albumRepository.deleteById(album_id);
@@ -67,13 +64,13 @@ public class AlbumServiceImp implements AlbumService {
         String title = albumDTO.getTitle();
         LocalDate releaseDate = albumDTO.getReleaseDate();
         String genre = albumDTO.getGenre();
-        Artist artist = artistService.getArtistByName(artistName);
+        Long id = albumRepository.findArtistIdByAlbumName(albumDTO.getTitle());
 
-        if (artist == null) {
+        if (id == null) {
             artistRepository.addArtist(artistName);
-            artist = artistService.getArtistByName(artistName);
+            id = artistRepository.findArtistIdByArtistName(artistName);
         }
-        albumRepository.saveAlbum(title, releaseDate, genre, artist.getArtistId());
+        albumRepository.saveAlbum(title, releaseDate, genre, id);
     }
 
     @Override
@@ -90,9 +87,10 @@ public class AlbumServiceImp implements AlbumService {
 
     @Override
     public AlbumBody viewAlbum(String album_name) {
-        long album_id = albumRepository.findAlbumIdByAlbumName(album_name);
+        long album_id = albumRepository.findAlbumIdByAlbumName(album_name).get(0);
         Album album = albumRepository.getAlbum(album_id).get(0);
-        AlbumDTO albumDTO = new AlbumDTO(album);
+        int duration = songRepository.getDuration(album_id);
+        AlbumDTO albumDTO = new AlbumDTO(album, duration);
         List<Song> song = songRepository.getSongsFromAlbum(album_id);
         List<SongDTO> songDTO = new ArrayList<>();
         for (Song song2 : song) {
@@ -103,5 +101,10 @@ public class AlbumServiceImp implements AlbumService {
         body.setSongDTO(songDTO);
         body.setAlbumDTO(albumDTO);
         return body;
+    }
+
+    @Override
+    public List<Album> getAlbums() {
+        return albumRepository.findAll();
     }
 }

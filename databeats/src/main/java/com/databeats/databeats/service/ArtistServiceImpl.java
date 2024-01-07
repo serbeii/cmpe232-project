@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import com.databeats.databeats.model.Album;
 import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.repository.AlbumRepository;
 import com.databeats.databeats.repository.ArtistRepository;
@@ -20,6 +21,9 @@ public class ArtistServiceImpl implements ArtistService {
     @Autowired
     private AlbumRepository albumRepository;
 
+    @Autowired
+    private AlbumService albumService;
+
     @Override
     @Transactional
     public boolean addArtist(Artist artist) {
@@ -29,6 +33,11 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     @Transactional
     public boolean removeArtistByName(String artistName) {
+        Long artistId = artistRepository.findArtistIdByArtistName(artistName);
+        List<Album> albums = albumRepository.findAlbumByArtistId(artistId);
+        for (Album album : albums) {
+            albumService.deleteAlbum(album.getAlbumTitle());
+        }
         return (artistRepository.removeArtistByName(artistName) > 0);
     }
 
