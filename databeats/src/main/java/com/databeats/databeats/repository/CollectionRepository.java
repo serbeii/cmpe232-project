@@ -34,9 +34,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long>{
     @Query(value = "DELETE FROM collection WHERE user_id = :userId OR  :userId IS NULL", nativeQuery = true)
     void deleteEntireCollection(@Param("userId") Optional<Long> userId);
 
-    /*@Query(value = "SELECT * FROM collection WHERE album_id = :albumId", nativeQuery = true)
-    List<Collection> viewArtistDiscographyInCollection(@Param("albumId") long userId);*/
-
     @Query(value = "SELECT * FROM collection WHERE user_id = :user_id", nativeQuery = true)
     List<Collection> getUserCollection(@Param("user_id") long user_id);
 }

@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 import com.databeats.databeats.service.UserService;
+import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.dto.CollectionDTO;
 import com.databeats.databeats.model.Collection;
 
@@ -56,13 +58,10 @@ public class UserController {
         return userService.getCollection(user_id);
     }
 
-   /*  @GetMapping ("/viewArtistDiscographyInCollection")
-     public List<Collection> viewArtistDiscographyInCollection(@RequestBody Map<String,String> payload){
-        String artistName = payload.get("artistName");
-
+    @PostMapping ("/viewArtistDiscographyInCollection")
+    public List<AlbumDTO> viewArtistDiscographyInCollection(@RequestParam String artistName){
         return(userService.viewArtistDiscographyInCollection(artistName));
-    }   
-    TODO: bunun yüksek ihtimalle List<Album> olması lazım discog albüm sonuçta*/
+    }
 
 
 }

@@ -10,6 +10,8 @@ public class AlbumDTO {
     private LocalDate releaseDate;
     private String genre;
     private String artistName;
+    private int duration;
+    private int totalTracks;
     
     public AlbumDTO() {
     }
@@ -34,7 +36,31 @@ public class AlbumDTO {
         this.artistName = album.getArtist().getArtistName();
         this.releaseDate = album.getReleaseDate();
     }
- 
+
+    public AlbumDTO(Album album, int duration) {
+        this.title = album.getAlbumTitle();
+        this.genre = album.getGenre();
+        this.artistName = album.getArtist().getArtistName();
+        this.releaseDate = album.getReleaseDate();
+        this.duration = duration;
+    }
+
+    public AlbumDTO(int totalTracks, Album album) {
+        this.title = album.getAlbumTitle();
+        this.genre = album.getGenre();
+        this.artistName = album.getArtist().getArtistName();
+        this.releaseDate = album.getReleaseDate();
+        this.totalTracks = totalTracks;
+    }
+
+	public int getTotalTracks() {
+		return totalTracks;
+	}
+
+	public void setTotalTracks(int totalTracks) {
+		this.totalTracks = totalTracks;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -46,6 +72,12 @@ public class AlbumDTO {
 	}
 	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 	public String getGenre() {
 		return genre;

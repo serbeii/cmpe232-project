@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.databeats.databeats.controller.LoginResponse;
+import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.dto.CollectionDTO;
 import com.databeats.databeats.dto.LoginDTO;
 import com.databeats.databeats.dto.UserDTO;
@@ -31,6 +32,7 @@ import com.databeats.databeats.repository.CollectionRepository;
 import com.databeats.databeats.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -135,20 +137,38 @@ public class UserServiceImpl implements UserService {
          collectionRepository.deleteEntireCollection(userId);
     }
 
-        /*@Override
-         public List<Collection> viewArtistDiscographyInCollection(String artistName){
-            if (artistName != null) {
-           Long artistId =artistRepository.findArtistIdByArtistName(artistName);
-           if (artistId != null) {
-           return(collectionRepository.viewArtistDiscographyInCollection(artistId.longValue()));
-        }
-          else{
-             throw new EntityNotFoundException("Artist not found for name: " + artistName);
-          }
+    @Override
+    public List<AlbumDTO> viewArtistDiscographyInCollection(String artistName) {
+        System.out.println(artistName); 
+        if (artistName != null) {
+            Long artistId = artistRepository.findArtistIdByArtistName(artistName);
+            if (artistId != null) {
+                System.out.println(artistId);
+                List<Object[]> result = albumRepository.findArtistDiscography(artistId);
+                return mapObjectArrayToAlbumDTOList(result);
+            } else {
+                throw new EntityNotFoundException("Artist not found for name: " + artistName);
+            }
         } else {
             // Handle the case where artistName is null
             throw new IllegalArgumentException("Artist name cannot be null");
-            }*/
+        }
+    }
+
+    private List<AlbumDTO> mapObjectArrayToAlbumDTOList(List<Object[]> result) {
+    List<AlbumDTO> albumDTOList = new ArrayList<>();
+    for (Object[] row : result) {
+        int totalTracks = ((Number) row[0]).intValue();
+        Long albumId = (Long) row[1];
+
+        Album album = albumRepository.findById(albumId)
+            .orElseThrow(() -> new EntityNotFoundException("Album not found for ID: " + albumId));
+
+        AlbumDTO albumDTO = new AlbumDTO(totalTracks, album);
+        albumDTOList.add(albumDTO);
+    }
+    return albumDTOList;
+}
         
     @Override
     public String getRoleById(long userId) {

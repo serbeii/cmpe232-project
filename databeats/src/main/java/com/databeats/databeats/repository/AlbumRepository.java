@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.model.Album;
 
 
@@ -54,4 +55,12 @@ public interface AlbumRepository extends JpaRepository<Album, Long>{
 
     @Query(value = "SELECT * FROM album WHERE album_title LIKE %:substring% AND album_id > 1 ORDER BY album_title ASC", nativeQuery = true)
     List<Album> searchAlbum(@Param("substring") String substring);
+
+    @Query(value = "SELECT COUNT(DISTINCT s.song_id) AS totalTracks, a.album_id, a.album_title, a.artist_id " +
+        "FROM album a LEFT JOIN song s ON a.album_id = s.album_id WHERE a.artist_id = :artist_id " +
+        "GROUP BY a.album_id, a.album_title, a.artist_id", nativeQuery = true)
+    List<Object[]> findArtistDiscography(@Param("artist_id") long artist_id);
+
+    @Query(value = "SELECT a.artist_id FROM album a WHERE a.album_title = :albumName", nativeQuery = true)
+    Long findArtistIdByAlbumName(@Param("albumName") String albumName);
 }

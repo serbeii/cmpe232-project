@@ -12,4 +12,6 @@ public interface ArtistService {
     public boolean removeArtistByName(String name);
 
     public Artist getArtistByName(String name);
+    public long getArtistIdByAlbum(String albumName);
+    public String getArtistNameByAlbum(String albumName);
 }

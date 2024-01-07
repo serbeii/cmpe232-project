@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 import com.databeats.databeats.model.Artist;
+import com.databeats.databeats.repository.AlbumRepository;
 import com.databeats.databeats.repository.ArtistRepository;
 
 @Service
@@ -13,6 +16,9 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Autowired
     private ArtistRepository artistRepository;
+
+    @Autowired
+    private AlbumRepository albumRepository;
 
     @Override
     @Transactional
@@ -37,4 +43,18 @@ public class ArtistServiceImpl implements ArtistService {
             return null;
         }
     }   
+
+    @Override
+    public long getArtistIdByAlbum(String albumName) {
+        return albumRepository.findArtistIdByAlbumName(albumName); 
+    }
+
+    @Override
+    public String getArtistNameByAlbum(String albumName) {
+        long artistId = albumRepository.findArtistIdByAlbumName(albumName);
+        Optional<Artist> optionalArtist = artistRepository.findById(artistId);
+
+        return optionalArtist.map(Artist::getArtistName).orElse("Unknown Artist");
+
+    }
 }

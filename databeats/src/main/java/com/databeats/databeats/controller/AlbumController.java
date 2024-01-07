@@ -49,8 +49,6 @@ public class AlbumController {
     public List<Album> getAlbumInfo(@RequestBody Map<String,String> albumID) {
         Long albumid= Long.parseLong(albumID.get("albumID"));
         return albumService.getAlbumInfo(albumid);
-        
-        
     }
     
     @PostMapping("/deleteAlbum")//when I want to delete something it deletes except one spesific information when ı tried to delete ı got error 500
