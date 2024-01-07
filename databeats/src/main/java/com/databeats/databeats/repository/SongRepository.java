@@ -36,4 +36,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
             @Param("duration") int duration,
             @Param("album_id") long album_id, @Param("artist_id") long artist_id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM song WHERE album_id = :albumId OR  :albumId IS NULL", nativeQuery = true)
+    void deleteSongByAlbum(@Param("albumId") long albumId);
 }

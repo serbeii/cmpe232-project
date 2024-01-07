@@ -23,7 +23,6 @@ import com.databeats.databeats.service.SongService;
 
 /* TODO: Implement the necesseary methods:
  * delete an album, delete all connected songs as well
- * update an album, its title, songs, song details, delete song if necesseary
  * view an album, get its tracklist, artist, total duration, count of songs*/
 
 @RestController
@@ -51,12 +50,10 @@ public class AlbumController {
         return albumService.getAlbumInfo(albumid);
     }
 
-    @PostMapping("/deleteAlbum") // when I want to delete something it deletes except one spesific information
-                                 // when ı tried to delete ı got error 500
-    public void deleteAlbum(@RequestBody Map<String, String> albumI) {
-        Long al_ID = Long.parseLong(albumI.get("album_id"));
-        System.out.println(albumService.deleteAlbum(al_ID) + "Album deleted");
-
+    @PostMapping("/deleteAlbum")
+    public void deleteAlbum(@RequestBody Map<String, String> payload) {
+        System.out.println(payload.get("albumName"));
+        albumService.deleteAlbum(payload.get("albumName"));
     }
 
     @GetMapping("/searchAlbum/{substring}")

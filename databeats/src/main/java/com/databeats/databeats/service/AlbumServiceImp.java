@@ -7,25 +7,26 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.databeats.databeats.model.Album;
-import com.databeats.databeats.repository.AlbumRepository;
 import com.databeats.databeats.dto.AlbumBody;
 import com.databeats.databeats.dto.AlbumDTO;
 import com.databeats.databeats.dto.SongDTO;
+import com.databeats.databeats.model.Album;
 import com.databeats.databeats.model.Artist;
 import com.databeats.databeats.model.Song;
+import com.databeats.databeats.repository.AlbumRepository;
 import com.databeats.databeats.repository.ArtistRepository;
 import com.databeats.databeats.repository.SongRepository;
+import com.databeats.databeats.repository.CollectionRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class AlbumServiceImp implements AlbumService {
-    
+
     @Autowired
     AlbumRepository albumRepository;
-   
-    @Autowired 
+
+    @Autowired
     ArtistRepository artistRepository;
 
     @Autowired
@@ -33,6 +34,9 @@ public class AlbumServiceImp implements AlbumService {
 
     @Autowired
     ArtistService artistService;
+
+    @Autowired
+    CollectionRepository collectionRepository; 
 
     @Override
     @Transactional
@@ -49,9 +53,11 @@ public class AlbumServiceImp implements AlbumService {
 
     @Override
     @Transactional
-    public Long deleteAlbum(long album_id) {
+    public void deleteAlbum(String albumName) {
+        long album_id = albumRepository.findAlbumIdByAlbumName(albumName);
+        songRepository.deleteSongByAlbum(album_id);
+        collectionRepository.deleteCollectionByAlbum(album_id);
         albumRepository.deleteById(album_id);
-        return album_id;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class AlbumServiceImp implements AlbumService {
         if (artist == null) {
             artistRepository.addArtist(artistName);
             artist = artistService.getArtistByName(artistName);
-        }   
+        }
         albumRepository.saveAlbum(title, releaseDate, genre, artist.getArtistId());
     }
 
@@ -75,15 +81,15 @@ public class AlbumServiceImp implements AlbumService {
         List<Album> albums = albumRepository.searchAlbum(substring);
         List<AlbumDTO> albumDTOs = new ArrayList<>();
         for (Album album : albums) {
-             AlbumDTO e = new AlbumDTO(album.getAlbumTitle(), album.getReleaseDate(),
-                album.getGenre(), album.getArtist().getArtistName());
-             albumDTOs.add(e);
-        } 
-        return albumDTOs; 
+            AlbumDTO e = new AlbumDTO(album.getAlbumTitle(), album.getReleaseDate(),
+                    album.getGenre(), album.getArtist().getArtistName());
+            albumDTOs.add(e);
+        }
+        return albumDTOs;
     }
 
     @Override
-    public AlbumBody viewAlbum(String album_name){
+    public AlbumBody viewAlbum(String album_name) {
         long album_id = albumRepository.findAlbumIdByAlbumName(album_name);
         Album album = albumRepository.getAlbum(album_id).get(0);
         AlbumDTO albumDTO = new AlbumDTO(album);

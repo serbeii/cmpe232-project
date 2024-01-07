@@ -20,14 +20,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     @Query(value = "UPDATE Album SET album_title = :newTitle WHERE album_title = :oldTitle", nativeQuery = true)
     void updateAlbumTitle(@Param("oldTitle") String oldTitle, @Param("newTitle") String newTitle);
 
-    /*
-     * @Modifying
-     * 
-     * @Query(value =
-     * "ALTER TABLE Album ADD CONSTRAINT unique_album_title UNIQUE (album_title) WHERE album_title=: albumTitle"
-     * , nativeQuery = true)
-     * void addUniqueConstraint(@Param("albumTitle") String albumTitle);
-     */
     @Query(value = "SELECT album.album_title,album.album_id,album.artist_id,album.genre,album.release_date " +
             "FROM album JOIN artist ON album.artist_id =artist.artist_id WHERE album.album_id= :albumID", nativeQuery = true)
     public List<Album> getAlbumInfo(@Param("albumID") Long albumID);
@@ -36,10 +28,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     public List<Album> getAlbum(@Param("album_id") long album_id);
 
     @Modifying
-    // Cannot delete or update a parent row: a foreign key constraint fails
-    // (`cmpe232`.`song`,
-    // CONSTRAINT `FKrcjmk41yqj3pl3iyii40niab0` FOREIGN KEY (`album_id`) REFERENCES
-    // `album` (`album_id`))
+    @Transactional
     @Query(value = "DELETE FROM album WHERE album_id = : album_id", nativeQuery = true)
     public void deleteAlbum(@Param("album_id") Long album_id);
 
@@ -57,7 +46,7 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
             @Param("genre") String genre,
             @Param("artist_id") Long artist_id);
 
-    @Query(value = "SELECT * FROM album WHERE album_title LIKE %:substring% AND album_id > 1 ORDER BY album_title ASC", nativeQuery = true)
+    @Query(value = "SELECT * FROM album WHERE album_title LIKE %:substring% AND album_id > (SELECT MIN(album_id) FROM album) ORDER BY album_title ASC", nativeQuery = true)
     List<Album> searchAlbum(@Param("substring") String substring);
 
     @Query(value = "SELECT COUNT(DISTINCT s.song_id) AS totalTracks, a.album_id, a.album_title, a.artist_id " +

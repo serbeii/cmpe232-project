@@ -41,27 +41,27 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AlbumRepository albumRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private CollectionRepository collectionRepository;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ArtistRepository artistRepository;
-    
+
     @Autowired
     private ArtistService artistService;
-    
+
     @Override
     @Transactional
     public String addUser(UserDTO userDTO) {
         userRepository.addUser(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()),
-                    userDTO.getRole());
+                userDTO.getRole());
         return userDTO.getRole();
     }
 
@@ -77,29 +77,28 @@ public class UserServiceImpl implements UserService {
                 LoginResponse login = new LoginResponse(user.map(User::getRoles).orElse(null),
                         user.map(User::getUserId).orElse(null));
                 if (user.isPresent()) {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(user.map(User::getUsername).orElse(null),
-                                null, user.map(User::getAuthorities).orElse(null));
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            user.map(User::getUsername).orElse(null),
+                            null, user.map(User::getAuthorities).orElse(null));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    
-                    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+                    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                            .getRequestAttributes()).getRequest();
 
                     HttpSession session = request.getSession();
                     session.setAttribute("userRoles", user.map(User::getAuthorities).orElse(null));
                     return new ResponseEntity<>(login, HttpStatus.OK);
-                }
-                else {
+                } else {
                     return new ResponseEntity<>(login, HttpStatus.FORBIDDEN);
                 }
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            else {
-                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @PostConstruct
     public void generateDefaultAdmin() {
         try {
@@ -109,37 +108,34 @@ public class UserServiceImpl implements UserService {
                 System.out.println("creating default admin");
                 artistRepository.addArtist("John Doe");
                 Artist artist = artistService.getArtistByName("John Doe");
-                albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", artist.getArtistId()); 
+                albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", artist.getArtistId());
                 addAlbumtoCollection(1, "Big Music");
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Error during initialization " + e);
         }
     }
-  
-        @Override
-         public void addAlbumtoCollection(long userId, String albumTitle){
-         long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
-         collectionRepository.addAlbumtoCollection(userId, albumId);
+
+    @Override
+    public void addAlbumtoCollection(long userId, String albumTitle) {
+        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
+        collectionRepository.addAlbumtoCollection(userId, albumId);
     }
 
-        @Override
-         public void deleteAlbumFromCollection(long userId, String albumTitle){
-         long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
-         collectionRepository.deleteAlbumFromCollection(userId, albumId);
+    @Override
+    public void deleteAlbumFromCollection(long userId, String albumTitle) {
+        long albumId = albumRepository.findAlbumIdByAlbumName(albumTitle);
+        collectionRepository.deleteAlbumFromCollection(userId, albumId);
     }
 
-        @Override
-         public void deleteEntireCollection(Optional<Long> userId){
-         
-         collectionRepository.deleteEntireCollection(userId);
+    @Override
+    public void deleteEntireCollection(Optional<Long> userId) {
+        collectionRepository.deleteEntireCollection(userId);
     }
 
     @Override
     public List<AlbumDTO> viewArtistDiscographyInCollection(String artistName) {
-        System.out.println(artistName); 
+        System.out.println(artistName);
         if (artistName != null) {
             Long artistId = artistRepository.findArtistIdByArtistName(artistName);
             if (artistId != null) {
@@ -156,30 +152,30 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<AlbumDTO> mapObjectArrayToAlbumDTOList(List<Object[]> result) {
-    List<AlbumDTO> albumDTOList = new ArrayList<>();
-    for (Object[] row : result) {
-        int totalTracks = ((Number) row[0]).intValue();
-        Long albumId = (Long) row[1];
+        List<AlbumDTO> albumDTOList = new ArrayList<>();
+        for (Object[] row : result) {
+            int totalTracks = ((Number) row[0]).intValue();
+            Long albumId = (Long) row[1];
 
-        Album album = albumRepository.findById(albumId)
-            .orElseThrow(() -> new EntityNotFoundException("Album not found for ID: " + albumId));
+            Album album = albumRepository.findById(albumId)
+                    .orElseThrow(() -> new EntityNotFoundException("Album not found for ID: " + albumId));
 
-        AlbumDTO albumDTO = new AlbumDTO(totalTracks, album);
-        albumDTOList.add(albumDTO);
+            AlbumDTO albumDTO = new AlbumDTO(totalTracks, album);
+            albumDTOList.add(albumDTO);
+        }
+        return albumDTOList;
     }
-    return albumDTOList;
-}
-        
+
     @Override
     public String getRoleById(long userId) {
         return userRepository.findById(userId).getRoles();
     }
-    
+
     @Override
     public boolean removeUser(String username) {
         return (userRepository.removeUser(username) > 0);
     }
-    
+
     @Override
     public boolean updateUsername(String oldUsername, String newUsername) {
         return (userRepository.updateUsername(oldUsername, newUsername) > 0);
@@ -188,13 +184,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<CollectionDTO> getCollection(long user_id) {
         List<Collection> collection = collectionRepository.getUserCollection(user_id);
-        List <CollectionDTO> userCollection = new ArrayList<>();
+        List<CollectionDTO> userCollection = new ArrayList<>();
         for (Collection coll : collection) {
             Album album = coll.getAlbum();
-            Artist artist = album.getArtist(); 
+            Artist artist = album.getArtist();
             CollectionDTO e = new CollectionDTO(album, artist);
             userCollection.add(e);
         }
-        return userCollection; 
+        return userCollection;
+    }
+
+    @Override
+    public String getUsername(long user_id) {
+        User user = userRepository.findById(user_id);
+        return user.getUsername();
     }
 }

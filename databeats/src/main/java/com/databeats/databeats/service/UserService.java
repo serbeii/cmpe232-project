@@ -21,4 +21,5 @@ public interface UserService {
     boolean removeUser(String username);
     boolean updateUsername(String oldUsername, String newUsername);
     List<CollectionDTO> getCollection(long user_id);
+    String getUsername(long user_id);
 }

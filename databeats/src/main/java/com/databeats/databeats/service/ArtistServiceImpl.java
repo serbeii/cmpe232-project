@@ -25,28 +25,28 @@ public class ArtistServiceImpl implements ArtistService {
     public boolean addArtist(Artist artist) {
         return (artistRepository.addArtist(artist.getArtistName()) > 0);
     }
-    
+
     @Override
     @Transactional
     public boolean removeArtistByName(String artistName) {
         return (artistRepository.removeArtistByName(artistName) > 0);
     }
-    
+
     @Override
     public Artist getArtistByName(String artistName) {
         List<Artist> artists = artistRepository.getArtistByName(artistName);
-    
+
         if (!artists.isEmpty()) {
             return artists.get(0);
         } else {
             System.out.println("artist not found " + artistName);
             return null;
         }
-    }   
+    }
 
     @Override
     public long getArtistIdByAlbum(String albumName) {
-        return albumRepository.findArtistIdByAlbumName(albumName); 
+        return albumRepository.findArtistIdByAlbumName(albumName);
     }
 
     @Override

@@ -24,12 +24,7 @@ import com.databeats.databeats.service.UserService;
 @CrossOrigin
 @RequestMapping("/api/v1/user")
 public class UserController {
-    /*
-     * TODO: implement necesseary methods
-     * delete entire collection
-     * change username and force logout
-     * view artist discography
-     */
+   
     @Autowired
     private UserService userService;
 
@@ -77,6 +72,11 @@ public class UserController {
         else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping("/getUsername/{user_id}")
+    public String getUsername(@PathVariable long user_id) {
+        return userService.getUsername(user_id);
     }
 
 }

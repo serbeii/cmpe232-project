@@ -12,7 +12,7 @@ import com.databeats.databeats.model.Album;
 public interface AlbumService {
     String updateAlbumTitle(String oldTitle, String newTitle);
     List<Album> getAlbumInfo(long albumID);
-    Long deleteAlbum(long album_id);
+    void deleteAlbum(String albumName);
     public void saveAlbum(AlbumDTO albumDTO);
     List<AlbumDTO> searchAlbum(String substring);
     AlbumBody viewAlbum(String album_name); 

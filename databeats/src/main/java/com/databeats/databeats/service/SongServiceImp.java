@@ -13,11 +13,11 @@ import com.databeats.databeats.repository.ArtistRepository;
 import com.databeats.databeats.repository.SongRepository;
 
 @Service
-public class SongServiceImp implements SongService{
+public class SongServiceImp implements SongService {
 
     @Autowired
     private SongRepository songRepository;
-    
+
     @Autowired
     private ArtistRepository artistRepository;
 
@@ -32,7 +32,7 @@ public class SongServiceImp implements SongService{
         for (int i = 1; i <= songDTO.size(); i++) {
             SongDTO songDTO2 = songDTO.get(i - 1);
             songRepository.addSong(i, songDTO2.getSong_title(), songDTO2.getDuration(),
-                   album_id, artist_id); 
+                    album_id, artist_id);
         }
     }
 }
