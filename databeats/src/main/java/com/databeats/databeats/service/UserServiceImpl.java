@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
                 userRepository.addUser("admin", passwordEncoder.encode("adminpass"), "ADMIN");
                 System.out.println("creating default admin");
                 artistRepository.addArtist("John Doe");
-                artistRepository.addArtist("John Doe");
                 albumRepository.saveAlbum("Big Music", LocalDate.of(1738, 07, 01), "banger", (long) 1);
                 addAlbumtoCollection(1, "Big Music");
             }
